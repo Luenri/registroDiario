@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Cobranzas Online</title>
+        <!-- Favicon
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+-->
+        
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="stylesheets/style.css" rel="stylesheet"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+
+
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand js-scroll-trigger" href="#page-top">Registro Diario</a>
+                <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#clientes">Clientes</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#crear">Crear Cliente</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#gasto">Agregar gasto</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="cobranza/reporte">Reporte</a></li>
+                        <a href="cobranza/cerrar" class="btn btn-danger"> salir</a>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <br>
+            <br>
+
+        </div>
+
+
+
+
+        <!-- SECCION DE CLIENTES-->
+        <section class="page-section bg-primary text-white mb-0" id="clientes" >
+            <div class="container">
+                <h2 class="page-section-heading text-center text-uppercase text-white">Clientes</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+
+        <!--NUEVA SECCION CON NUEVA VISTA-->
+        <div class="container">
+            <br>
+            <div class="row justify-content-center">
+                <input type="text" id="myInput2" onkeyup="filtrarClientes()" placeholder="Buscar por nombre">
+            </div>
+            <br>
+        </div>
+
+        <div class="row justify-content-center">
+            <table class="table table-success table-striped">
+                <th>
+                    Fecha Inicial
+                </th>
+                <th>
+                    Nombre
+                </th>
+                <th>
+                    Venta
+                </th>
+                <th>
+                    Abono
+                </th>
+                <th>
+                    Abonado
+                </th>
+                <th>
+                    Saldo
+                </th>
+                <!--
+                <th>
+                    Acciones
+                </th>
+                -->
+                <% for (var i = 0; i <clientes.length; i++) { %>
+                    <% if (clientes[i].valorPorCobrar != 0) { %>
+                    
+                    <tr class="filasC">
+                      <td>
+                        <%=clientes[i].fecha%>
+                      </td>
+                     
+                      <td>
+                        <%=clientes[i].nombre%> <%=clientes[i].apellido%>  
+                      </td>
+                      <td >
+                        <%=clientes[i].totalPagar%>
+                      </td>
+                      <td>
+                        <form action="/cobranza/abono/<%=clientes[i].id %>" method="post" >
+                            <div class='form-group'>
+                                <input type="text" name="valor" placeholder="Valor del Abono" class="form-control">
+                                <button type= "submit" class='btn btn-primary'>Agregar Abono</button>
+                            </div>
+                            <a href="cobranza/abono/historial/<%= clientes[i].id %>" class="btn btn-info">Ver historial</a>
+                        </form>
+                      </td>
+                      <td>
+                        <%=clientes[i].valorPagado%>
+
+                      </td>
+                      <td>
+                        <%=clientes[i].valorPorCobrar%>
+                      </td>
+                <!--
+                      <td>
+                        <a href="cobranza/delete/<%= clientes[i].id %>" class="btn btn-danger" onclick="return confirmation()">Eliminar</a>
+                        <a href="cobranza/update/<%= clientes[i].id %>" class="btn btn-info">Actualizar</a>
+                      </td>
+                    </tr>-->
+                    <% } %>
+                    <% } %>
+
+            </table>
+
+            <% var total=0; %>
+                <% for (var i = 0; i <clientes.length; i++) { %>
+                    <% total= total + clientes[i].valorPorCobrar %>
+
+                <% } %>
+
+                <div class="row justify-content-center">
+                    <table class="table table-success table-striped">
+                        <th>
+                            Saldos totales por cobrar
+                        </th>
+                        <tr>
+                            <td>
+                                Total a cobrar: 
+                            </td>
+                            <td class="font-weight-bold Negrita">
+                               $ <%= total %>
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </div>
+
+                <div class="row justify-content-center">
+                    <table class="table table-success table-striped">
+                        <tr>
+                            <th>
+                                CAJA
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                Total en la caja: 
+                            </td>
+                            <td class="font-weight-bold Negrita">
+                               $ <%= data[0].valor %>
+                            </td>
+                            <!--
+                                <td>
+                                <a href="cobranza/caja/actualizar" class="btn btn-info" >Actualizar Caja</a>
+                            </td>-->
+                        </tr>
+
+                    </table>
+
+                </div>
+
+        </div>
+
+
+
+
+
+
+                <!--
+
+
+                <div class="row justify-content-center">
+                    <table class="table table-success table-striped">
+                        
+                          <th>
+                            Cliente
+                          </th>
+            
+                          <th>
+                            Prestamos
+                          </th>
+                          <th>
+                            Total a pagar
+                          </th>
+                          <th>
+                              Plazo
+                          </th>
+                          <th>
+                              Acciones
+                          </th>
+        
+                          <% for (var i = 0; i <clientes.length; i++) { %>
+                            <tr class="filasC">
+                              <td>
+                                <%=clientes[i].nombre%> <%=clientes[i].apellido%>
+                              </td>
+                             
+                              <td>
+                                <%=clientes[i].valorPrestado%>
+                              </td>
+                              <td >
+                                <%=clientes[i].totalPagar%>
+                              </td>
+                              <td>
+                                <%=clientes[i].plazo%>
+
+                              </td>
+                              <td>
+                                <a href="cobranza/delete/<%= clientes[i].id %>" class="btn btn-danger" onclick="return confirmation()">Eliminar</a>
+                                <a href="cobranza/update/<%= clientes[i].id %>" class="btn btn-info">Actualizar</a>
+                              </td>
+                            </tr>
+                            <% } %>
+                    </table>
+
+
+                </div>
+                -->
+
+            </div>
+
+            <script type="text/javascript">
+                function confirmation() 
+                {
+                   if(confirm("Seguro que desea eliminar este cliente?"))
+               {
+                  return true;
+               }
+               else
+               {
+                  return false;
+               }
+                }
+               </script>
+
+        </section>
+
+
+
+        <!-- SECCION DE SALDOS
+        <section class="page-section portfolio" id="saldos">
+            <div class="container">
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Saldos</h2>
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+
+                <div class="container">
+                    <br>
+                    <div class="row justify-content-center">
+                        <input type="text" id="myInput1" onkeyup="filtrarSaldos()" placeholder="Buscar por nombre">
+                    </div>
+                    <br>
+                </div>
+
+                <div class="row justify-content-center">
+
+
+                    <table class="table table-success table-striped">
+                        <th>
+                            Cliente
+                        </th>
+                        <th>
+                            Total a pagar
+                        </th>
+                        <th>
+                            Valor Pagado
+                        </th>
+                        <th>
+                            Saldo Por Cobrar
+                        </th>
+
+                        <% for (var i = 0; i <clientes.length; i++) { %>
+                            <% if (clientes[i].valorPorCobrar != 0) { %>
+                                <tr class="filasS">
+                                    <td>
+                                        <%=clientes[i].nombre%> <%= clientes[i].apellido%>
+                                    </td>
+                                  <td>
+                                    $ <%=clientes[i].totalPagar%> 
+                                  </td>
+                                  <td>
+                                    $ <%=clientes[i].valorPagado%>
+                                  </td>
+                                  <td class="font-weight-bold Negrita">
+                                    $ <%= clientes[i].valorPorCobrar%>
+                                  </td>
+                                </tr>
+                            
+                            <% } %>
+                            <% } %>
+
+                    </table>
+                    
+-->
+        <section class="page-section bg-primary text-white mb-0" id="saldos">
+            <div class="container">
+            
+                
+
+
+
+
+
+
+
+            </div>
+        </section>
+
+
+
+
+
+        <!-- SECCION DE ABONOS
+        <section class="page-section bg-primary text-white mb-0" id="abonos">
+            <div class="container">
+                <h2 class="page-section-heading text-center text-uppercase text-white">Abonos</h2>
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+
+                <div class="container">
+                    <br>
+                    <div class="row justify-content-center">
+                        <input type="text" id="myInput" onkeyup="filtrarAbonos()" placeholder="Buscar por nombre">
+                    </div>
+                    <br>
+                </div>
+
+                <div class="row justify-content-center">
+
+                    <table class="table table-success table-striped">
+                        <th>
+                            Clientes
+                        </th>
+                        <th>
+                            Acciones
+                        </th>
+
+                        <% for (var i = 0; i <clientes.length; i++) { %>
+                            <tr class="filasA">
+                                <td>
+                                    <%= clientes[i].nombre%> <%= clientes[i].apellido%>
+                                </td>
+
+                                <td>
+                                    <a href="cobranza/abono/<%= clientes[i].id %>" class="btn btn-info">Agregar Abono</a>
+                                    <a href="cobranza/abono/historial/<%= clientes[i].id %>" class="btn btn-info">Ver historial</a>
+                                </td>
+
+                              
+                            </tr>
+                            <% } %>
+
+
+
+
+                    </table>
+
+                </div>
+
+            
+
+               
+            </div>
+        </section>
+        -->
+
+
+
+
+
+
+        <!-- SECCION DE CREAR UN CLIENTE-->
+        <section class="page-section" id="crear">
+            <div class="container">
+                <!-- Contact Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Crear Cliente</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+
+
+
+                <div class="card body">
+                    <div class='card-title'>
+                      Inserte un nuevo Cliente
+                    </div>
+
+                    <form action="cobranza/add" method="post" >
+                        <div class='form-group'>
+                            <input type="text" name="nombre"  placeholder="Nombre" class="form-control">
+                            <input type="text" name="apellido" placeholder="Apellido" class="form-control">
+                            <input type="text" name="valorPrestado"  placeholder="Valor prestado" class="form-control">
+                            <input type="text" name="plazo"  placeholder="Dias plazo" class="form-control">
+                           <!---<input type="datetime-local" name='fecha' placeholder="Fecha" class="form-control">
+                        -->   
+                            <button type= "submit" class='btn btn-primary'>Crear</button>
+                        </div>
+                        
+                    </form>
+          
+                </div>
+
+
+
+
+
+            </div>
+        </section>
+
+        
+        <!-- SECCION DE AÑADIR UN GASTO-->
+        <section class="page-section bg-primary text-white mb-0" id="gasto">
+            <div class="container">
+                <!-- Contact Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-white">Agregar Gasto</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+
+
+
+                <div class="card body">
+                    <div class='card-title'>
+                      Inserte un Gasto
+                    </div>
+
+                    <form action="cobranza/add/gasto" method="post" >
+                        <div class='form-group'>
+                            <input type="text" name="valor"  placeholder="Valor" class="form-control">
+                            <input type="text" name="detalle"  placeholder="Detalle" class="form-control">
+                            <!--
+                                <input type="datetime-local" name="fecha" placeholder="fecha" class="form-control">
+
+                            -->
+                          
+                            
+                            <button type= "submit" class='btn btn-primary' onclick="return confirmationGasto()">Agregar</button>
+                            <a href="cobranza/historial/gastos" class="btn btn-info">Historial de Gastos</a>
+                        </div>
+                        
+                    </form>
+          
+                </div>
+
+
+
+
+
+            </div>
+
+            <script type="text/javascript">
+                function confirmationGasto() 
+                {
+                   if(confirm("Seguro que desea Agregar este nuevo Gasto?"))
+               {
+                  return true;
+               }
+               else
+               {
+                  return false;
+               }
+                }
+               </script>
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Footer-->
+        <footer class="footer text-center">
+            <div class="container">
+                <div class="row">
+                    <!-- Footer Location-->
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <h4 class="text-uppercase mb-4">Location</h4>
+                        <p class="lead mb-0">
+                            2215 John Daniel Drive
+                            <br />
+                            Clark, MO 65243
+                        </p>
+                    </div>
+                    <!-- Footer Social Icons-->
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <h4 class="text-uppercase mb-4">Around the Web</h4>
+                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-linkedin-in"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-dribbble"></i></a>
+                    </div>
+                    <!-- Footer About Text-->
+                    <div class="col-lg-4">
+                        <h4 class="text-uppercase mb-4">About Freelancer</h4>
+                        <p class="lead mb-0">
+                            Freelance is a free to use, MIT licensed Bootstrap theme created by
+                            <a href="http://startbootstrap.com">Start Bootstrap</a>
+                            .
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Copyright Section-->
+        <div class="copyright py-4 text-center text-white">
+            <div class="container"><small>Copyright © Your Website 2020</small></div>
+        </div>
+        <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes)-->
+        <div class="scroll-to-top d-lg-none position-fixed">
+            <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top"><i class="fa fa-chevron-up"></i></a>
+        </div>
+        <!-- Portfolio Modals-->
+        <!-- Portfolio Modal 1-->
+        <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                    </button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0" id="portfolioModal1Label">Log Cabin</h2>
+                                    <!-- Icon Divider-->
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    
+                                    <!-- Portfolio Modal - Text-->
+                                    <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                                    <button class="btn btn-primary" data-dismiss="modal">
+                                        <i class="fas fa-times fa-fw"></i>
+                                        Close Window
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Portfolio Modal 2-->
+        <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-labelledby="portfolioModal2Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                    </button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0" id="portfolioModal2Label">Tasty Cake</h2>
+                                    <!-- Icon Divider-->
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    
+                                    <!-- Portfolio Modal - Text-->
+                                    <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                                    <button class="btn btn-primary" data-dismiss="modal">
+                                        <i class="fas fa-times fa-fw"></i>
+                                        Close Window
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Portfolio Modal 3-->
+        <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-labelledby="portfolioModal3Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                    </button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0" id="portfolioModal3Label">Circus Tent</h2>
+                                    <!-- Icon Divider-->
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    
+                                    <!-- Portfolio Modal - Text-->
+                                    <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                                    <button class="btn btn-primary" data-dismiss="modal">
+                                        <i class="fas fa-times fa-fw"></i>
+                                        Close Window
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Portfolio Modal 4-->
+        <div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" role="dialog" aria-labelledby="portfolioModal4Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                    </button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0" id="portfolioModal4Label">Controller</h2>
+                                    <!-- Icon Divider-->
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    
+                                   
+                                    <!-- Portfolio Modal - Text-->
+                                    <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                                    <button class="btn btn-primary" data-dismiss="modal">
+                                        <i class="fas fa-times fa-fw"></i>
+                                        Close Window
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Portfolio Modal 5-->
+        <div class="portfolio-modal modal fade" id="portfolioModal5" tabindex="-1" role="dialog" aria-labelledby="portfolioModal5Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                    </button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0" id="portfolioModal5Label">Locked Safe</h2>
+                                    <!-- Icon Divider-->
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    
+                                    <!-- Portfolio Modal - Text-->
+                                    <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                                    <button class="btn btn-primary" data-dismiss="modal">
+                                        <i class="fas fa-times fa-fw"></i>
+                                        Close Window
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Portfolio Modal 6-->
+        <div class="portfolio-modal modal fade" id="portfolioModal6" tabindex="-1" role="dialog" aria-labelledby="portfolioModal6Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                    </button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0" id="portfolioModal6Label">Submarine</h2>
+                                    <!-- Icon Divider-->
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    
+                                    <!-- Portfolio Modal - Text-->
+                                    <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                                    <button class="btn btn-primary" data-dismiss="modal">
+                                        <i class="fas fa-times fa-fw"></i>
+                                        Close Window
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <script type="text/javascript" src="javascripts/buscador.js"></script>
+    
+    </body>
+</html>
